@@ -1,6 +1,6 @@
-import shutil, os, subprocess
+from pathlib import Path
+import shutil, os
 import site, sys
-from importlib import util
 from distutils.core import setup
 from setuptools.command.install import install
 
@@ -8,11 +8,13 @@ class CustomInstallCommand(install):
    def run(self):
        install.run(self)
        # Post-installation routine
-       ANARCI_LOC = os.path.join(site.getsitepackages()[0], 'anarci') # site-packages/ folder
+       ANARCI_LOC = Path(site.getsitepackages()[0]) / "anarci" # site-packages/ folder
        ANARCI_BIN = sys.executable.split('python')[0] # bin/ folder
 
        shutil.copy('bin/ANARCI', ANARCI_BIN) # copy ANARCI executable
        print("INFO: ANARCI lives in: ", ANARCI_LOC) 
+
+       ANARCI_LOC.mkdir(parents=True, exist_ok=True) # Create ANARCI folder
 
        # Build HMMs from IMGT germlines
        os.chdir("build_pipeline")
@@ -26,8 +28,10 @@ class CustomInstallCommand(install):
        
        # Copy HMMs where ANARCI can find them
        shutil.copy( "curated_alignments/germlines.py", ANARCI_LOC )
-       os.mkdir(os.path.join(ANARCI_LOC, "dat"))
-       shutil.copytree( "HMMs", os.path.join(ANARCI_LOC, "dat/HMMs/") )
+       (ANARCI_LOC / "dat").mkdir(parents=True, exist_ok=True)
+       site_packages_hmms = ANARCI_LOC / "dat/HMMs/"
+       shutil.rmtree(site_packages_hmms)
+       shutil.copytree("HMMs", site_packages_hmms)
       
     #   # Remove data from HMMs generation
     #    try:

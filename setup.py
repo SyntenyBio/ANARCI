@@ -16,27 +16,27 @@ class CustomInstallCommand(install):
 
        # Build HMMs from IMGT germlines
        os.chdir("build_pipeline")
-       print('INFO: Downloading germlines from IMGT and building HMMs...')
-       print("INFO: running 'RUN_pipeline.sh', this will take a couple a minutes.")
-       proc = subprocess.Popen(["bash", "RUN_pipeline.sh"], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-       o, e = proc.communicate()
+    #    print('INFO: Downloading germlines from IMGT and building HMMs...')
+    #    print("INFO: running 'RUN_pipeline.sh', this will take a couple a minutes.")
+    #    proc = subprocess.Popen(["bash", "RUN_pipeline.sh"], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    #    o, e = proc.communicate()
 
-       print(o.decode())
-       print(e.decode())
+    #    print(o.decode())
+    #    print(e.decode())
        
        # Copy HMMs where ANARCI can find them
        shutil.copy( "curated_alignments/germlines.py", ANARCI_LOC )
        os.mkdir(os.path.join(ANARCI_LOC, "dat"))
        shutil.copytree( "HMMs", os.path.join(ANARCI_LOC, "dat/HMMs/") )
       
-      # Remove data from HMMs generation
-       try:
-           shutil.rmtree("curated_alignments/")
-           shutil.rmtree("muscle_alignments/")
-           shutil.rmtree("HMMs/")
-           shutil.rmtree("IMGT_sequence_files/")
-       except OSError:
-           pass
+    #   # Remove data from HMMs generation
+    #    try:
+    #        shutil.rmtree("curated_alignments/")
+    #        shutil.rmtree("muscle_alignments/")
+    #        shutil.rmtree("HMMs/")
+    #        shutil.rmtree("IMGT_sequence_files/")
+    #    except OSError:
+    #        pass
 
 setup(name='anarci',
      version='1.3',

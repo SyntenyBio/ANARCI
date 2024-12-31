@@ -30,7 +30,8 @@ class CustomInstallCommand(install):
        shutil.copy( "curated_alignments/germlines.py", ANARCI_LOC )
        (ANARCI_LOC / "dat").mkdir(parents=True, exist_ok=True)
        site_packages_hmms = ANARCI_LOC / "dat/HMMs/"
-       shutil.rmtree(site_packages_hmms)
+       if site_packages_hmms.exists():
+         shutil.rmtree(site_packages_hmms)
        shutil.copytree("HMMs", site_packages_hmms)
       
     #   # Remove data from HMMs generation
